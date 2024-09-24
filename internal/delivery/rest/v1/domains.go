@@ -37,11 +37,6 @@ func AddDomainRoutesToGroup(group fiber.Router) {
 			result = append(result, string(serialized_domain))
 		}
 
-		if err != nil {
-			fmt.Println("error = ", err)
-			return c.SendStatus(400)
-		}
-
 		return c.JSON(result)
 	})
 
