@@ -66,7 +66,7 @@ func AddDomainRoutesToGroup(group fiber.Router) {
 			fmt.Println("error = ", err)
 			return c.SendStatus(400)
 		}
-		println(string(result))
+
 		return c.JSON(string(result))
 	})
 }
