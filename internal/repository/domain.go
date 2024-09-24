@@ -1,21 +1,25 @@
-package service
+package repository
 
 import (
-	"github.com/LastDarkNes/go-dns/custom_errors"
-	"github.com/LastDarkNes/go-dns/model"
+	"github.com/LastDarkNes/go-dns/internal/model"
+	"github.com/LastDarkNes/go-dns/pkg/custom_errors"
 )
 
-type DomainServiceInterface interface {
-	Get(string) (model.Domain, error)
-	Create(model.Domain) model.Domain
-	GetMultiple(int, int) []model.Domain
+type DomainRepository interface {
+	GetByName(string) (model.Domain, error)
+	Save(model.Domain) (model.Domain, error)
+	GetPaginated(int, int) []model.Domain
 }
 
-type DomainService struct {
+type domainRepository struct {
 	domains []model.Domain
 }
 
-func (d *DomainService) Get(name string) (model.Domain, error) {
+func NewDomainRepository() domainRepository {
+	return domainRepository{}
+}
+
+func (d *domainRepository) GetByName(name string) (model.Domain, error) {
 	for _, domain := range d.domains {
 		if domain.Name == name {
 			return domain, nil
@@ -26,7 +30,7 @@ func (d *DomainService) Get(name string) (model.Domain, error) {
 
 }
 
-func (d *DomainService) Create(new_domain model.Domain) (model.Domain, error) {
+func (d *domainRepository) Save(new_domain model.Domain) (model.Domain, error) {
 	for _, domain := range d.domains {
 		if domain.Name == new_domain.Name {
 			return model.Domain{}, custom_errors.UnexpectedBehaviourError{Message: "Domain with such name already exists"}
@@ -38,7 +42,7 @@ func (d *DomainService) Create(new_domain model.Domain) (model.Domain, error) {
 
 }
 
-func (d *DomainService) GetMultiple(limit int, offset int) []model.Domain {
+func (d *domainRepository) GetPaginated(limit int, offset int) []model.Domain {
 	var foundDomains []model.Domain
 	total_domains := len(d.domains)
 	for index, domain := range d.domains {

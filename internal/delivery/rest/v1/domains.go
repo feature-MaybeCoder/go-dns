@@ -1,24 +1,19 @@
-package main
+package v1
 
 import (
 	"encoding/json"
 	"fmt"
 	"strconv"
 
-	"github.com/LastDarkNes/go-dns/controller"
-	"github.com/LastDarkNes/go-dns/model"
-	"github.com/LastDarkNes/go-dns/service"
+	"github.com/LastDarkNes/go-dns/internal/model"
+	"github.com/LastDarkNes/go-dns/internal/service"
 	"github.com/gofiber/fiber/v2"
 )
 
-func main() {
-	app := fiber.New()
+func AddDomainRoutesToGroup(group fiber.Router) {
+	domain_service := service.NewDomainService()
 
-	var domain_controller = controller.DomainController{
-		Service: service.DomainService{},
-	}
-
-	app.Get("/domains", func(c *fiber.Ctx) error {
+	group.Get("/domains", func(c *fiber.Ctx) error {
 		pageString := c.Query("page")
 
 		page, err := strconv.Atoi(pageString)
@@ -27,7 +22,7 @@ func main() {
 			return c.SendStatus(400)
 		}
 
-		domains := domain_controller.GetPaginated(page)
+		domains := domain_service.GetPage(page)
 
 		var result []string
 
@@ -50,7 +45,7 @@ func main() {
 		return c.JSON(result)
 	})
 
-	app.Post("/domains", func(c *fiber.Ctx) error {
+	group.Post("/domains", func(c *fiber.Ctx) error {
 		c.Accepts("text/plain", "application/json")
 
 		domain := new(model.Domain)
@@ -60,7 +55,7 @@ func main() {
 			return c.SendStatus(400)
 		}
 
-		new_domain, err := domain_controller.Create(*domain)
+		new_domain, err := domain_service.Create(*domain)
 		if err != nil {
 			fmt.Println("error = ", err)
 			return c.SendStatus(400)
@@ -74,6 +69,4 @@ func main() {
 		println(string(result))
 		return c.JSON(string(result))
 	})
-
-	app.Listen(":3000")
 }
