@@ -5,18 +5,15 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/LastDarkNes/go-dns/controller"
-	"github.com/LastDarkNes/go-dns/model"
-	"github.com/LastDarkNes/go-dns/service"
+	"github.com/LastDarkNes/go-dns/internal/model"
+	"github.com/LastDarkNes/go-dns/internal/service"
 	"github.com/gofiber/fiber/v2"
 )
 
 func main() {
 	app := fiber.New()
 
-	var domain_controller = controller.DomainController{
-		Service: service.DomainService{},
-	}
+	domain_service := service.NewDomainService()
 
 	app.Get("/domains", func(c *fiber.Ctx) error {
 		pageString := c.Query("page")
@@ -27,7 +24,7 @@ func main() {
 			return c.SendStatus(400)
 		}
 
-		domains := domain_controller.GetPaginated(page)
+		domains := domain_service.GetPage(page)
 
 		var result []string
 
@@ -60,7 +57,7 @@ func main() {
 			return c.SendStatus(400)
 		}
 
-		new_domain, err := domain_controller.Create(*domain)
+		new_domain, err := domain_service.Create(*domain)
 		if err != nil {
 			fmt.Println("error = ", err)
 			return c.SendStatus(400)
