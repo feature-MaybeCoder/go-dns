@@ -34,3 +34,6 @@ go.work.sum
 # binary
 .bin/*
 !.bin/.gitkeep
+
+# Mac
+*.DS_Store
