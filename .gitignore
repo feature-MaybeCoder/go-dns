@@ -26,3 +26,11 @@ go.work.sum
 
 # vscode
 .vscode
+
+# docker
+.docker_data/*
+!.docker_data/.gitkeep
+
+# binary
+.bin/*
+!.bin/.gitkeep
