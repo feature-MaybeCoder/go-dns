@@ -2,6 +2,8 @@ module github.com/LastDarkNes/go-dns
 
 go 1.21.0
 
+require github.com/gofiber/fiber/v2 v2.52.5
+
 require (
 	github.com/gofiber/fiber/v2 v2.52.5
 	github.com/sethvargo/go-envconfig v1.1.0
