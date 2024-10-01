@@ -10,5 +10,6 @@ func main() {
 	app := fiber.New()
 	middlewares.RegisterMiddlewares(app)
 	rest.AddV1RoutesToApp(app)
+
 	app.Listen(":3000")
 }
