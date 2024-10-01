@@ -6,8 +6,8 @@ import (
 )
 
 type DomainService interface {
-	Get(string) (model.Domain, error)
-	Create(model.Domain) (model.Domain, error)
+	Get(string) (*model.Domain, error)
+	Create(model.Domain) (*model.Domain, error)
 	GetPage(int) []model.Domain
 }
 
@@ -15,19 +15,19 @@ type domainService struct {
 	repo repository.DomainRepository
 }
 
-func NewDomainService() domainService {
+func NewDomainService() DomainService {
 	new_repo := repository.NewDomainRepository()
-	return domainService{
-		repo: &new_repo,
+	return &domainService{
+		repo: new_repo,
 	}
 
 }
 
-func (d *domainService) Get(name string) (model.Domain, error) {
+func (d *domainService) Get(name string) (*model.Domain, error) {
 	return d.repo.GetByName(name)
 }
 
-func (d *domainService) Create(domain model.Domain) (model.Domain, error) {
+func (d *domainService) Create(domain model.Domain) (*model.Domain, error) {
 	return d.repo.Save(domain)
 }
 

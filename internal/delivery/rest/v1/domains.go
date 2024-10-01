@@ -24,22 +24,15 @@ func AddDomainRoutesToGroup(group fiber.Router) {
 
 		domains := domain_service.GetPage(page)
 
-		var result []string
+		result := make([]string, len(domains))
 
-		for _, domain := range domains {
+		for i, domain := range domains {
 			serialized_domain, err := json.Marshal(domain)
-
 			if err != nil {
 				fmt.Println("error = ", err)
 				return c.SendStatus(400)
 			}
-
-			result = append(result, string(serialized_domain))
-		}
-
-		if err != nil {
-			fmt.Println("error = ", err)
-			return c.SendStatus(400)
+			result[i] = string(serialized_domain)
 		}
 
 		return c.JSON(result)
