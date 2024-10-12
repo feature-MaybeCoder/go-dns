@@ -10,6 +10,12 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+type DomainService interface {
+	Get(string) (*model.Domain, error)
+	Create(model.Domain) (*model.Domain, error)
+	GetPage(int) []model.Domain
+}
+
 func AddDomainRoutesToGroup(group fiber.Router) {
 	domain_service := service.NewDomainService()
 
