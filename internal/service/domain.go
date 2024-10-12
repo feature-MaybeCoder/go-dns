@@ -3,19 +3,20 @@ package service
 import (
 	"github.com/LastDarkNes/go-dns/internal/model"
 	"github.com/LastDarkNes/go-dns/internal/repository"
+	"github.com/LastDarkNes/go-dns/pkg/config"
 )
 
-type DomainService interface {
-	Get(string) (*model.Domain, error)
-	Create(model.Domain) (*model.Domain, error)
-	GetPage(int) []model.Domain
+type DomainRepository interface {
+	GetByName(string) (*model.Domain, error)
+	Save(model.Domain) (*model.Domain, error)
+	GetPaginated(limit int, offset int) []model.Domain
 }
 
 type domainService struct {
-	repo repository.DomainRepository
+	repo DomainRepository
 }
 
-func NewDomainService() DomainService {
+func NewDomainService() *domainService {
 	new_repo := repository.NewDomainRepository()
 	return &domainService{
 		repo: new_repo,
@@ -32,5 +33,8 @@ func (d *domainService) Create(domain model.Domain) (*model.Domain, error) {
 }
 
 func (d *domainService) GetPage(page int) []model.Domain {
-	return d.repo.GetPaginated(10, page*10)
+	return d.repo.GetPaginated(
+		config.CommonConfig.ItemsPerPaginationPage,
+		page*config.CommonConfig.ItemsPerPaginationPage,
+	)
 }

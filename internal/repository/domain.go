@@ -5,17 +5,11 @@ import (
 	"github.com/LastDarkNes/go-dns/pkg/custom_errors"
 )
 
-type DomainRepository interface {
-	GetByName(string) (*model.Domain, error)
-	Save(model.Domain) (*model.Domain, error)
-	GetPaginated(limit int, offset int) []model.Domain
-}
-
 type domainRepository struct {
 	domains []model.Domain
 }
 
-func NewDomainRepository() DomainRepository {
+func NewDomainRepository() *domainRepository {
 	return &domainRepository{}
 }
 
